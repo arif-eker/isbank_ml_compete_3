@@ -68,10 +68,12 @@ df_test.shape
 df_train["target"] = df_train["target"].astype(int)
 df_train["target"].dtype
 
-X = df_train.drop("target", axis=1)
-y = np.ravel(df_train[["target"]])
+X_train = df_train.drop("target", axis=1)
+y_train = np.ravel(df_train[["target"]])
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=123, stratify=y)
+X_test = df_test.drop("target", axis=1)
+#y_test = np.ravel(df_test[["target"]])
+
 
 rf_params = {"max_depth": [3, 5, 8],
              "max_features": [8, 15, 25],
@@ -88,11 +90,23 @@ gs_cv_rf = GridSearchCV(rf,
                         verbose=2).fit(X_train, y_train)
 
 rf_tuned = RandomForestClassifier(**gs_cv_rf.best_params_, random_state=123).fit(X_train, y_train)
+gs_cv_rf.best_params_
 
-models = [("RF", rf_tuned)]
+#models = [("RF", rf_tuned)]
+#
+# for name, model in models:
+#     y_pred = model.predict(X_test)
+#     acc = accuracy_score(y_test, y_pred)
+#     msg = "%s: (%f)" % (name, acc)
+#     print(msg)
 
-for name, model in models:
-    y_pred = model.predict(X_test)
-    acc = accuracy_score(y_test, y_pred)
-    msg = "%s: (%f)" % (name, acc)
-    print(msg)
+
+
+
+# Submission File
+y_preds = rf_tuned.predict(X_test)
+sub = pd.DataFrame()
+sub["musteri"] = merged_df[merged_df["target"].isnull()]["musteri"]
+sub["target"] = y_preds
+sub.head()
+sub.to_csv('datasets/rf_classifier_3_8_2_200.csv', index=False)
