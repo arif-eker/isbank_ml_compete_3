@@ -1,0 +1,2 @@
+max depth : 3 -- max features : 8 -- min samples split : 2 -- n estimators : 200
+Yukarıdaki parametreler 0.50  submission puanına sahip.

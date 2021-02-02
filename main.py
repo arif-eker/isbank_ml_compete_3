@@ -10,12 +10,12 @@ from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_sc
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, roc_auc_score, roc_curve, \
     classification_report
+
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 train_test = hlp.get_merge_df()
-
 
 monthly_df = hlp.get_singular_monthly_expenditures()
 
@@ -53,10 +53,9 @@ fill_mod_col = ["egitim", "is_durumu", "meslek_grubu"]
 for col in fill_mod_col:
     df[col] = df[col].fillna(df[col].mode()[0])
 
-
 df.info()
 
-df,new_cols = hlp.one_hot_encoder(df,["egitim","is_durumu","meslek_grubu"])
+df, new_cols = hlp.one_hot_encoder(df, ["egitim", "is_durumu", "meslek_grubu"])
 df.head()
 
 df_train = df[df["target"].notnull()]
@@ -72,7 +71,7 @@ X_train = df_train.drop("target", axis=1)
 y_train = np.ravel(df_train[["target"]])
 
 X_test = df_test.drop("target", axis=1)
-#y_test = np.ravel(df_test[["target"]])
+# y_test = np.ravel(df_test[["target"]])
 
 
 rf_params = {"max_depth": [3, 5, 8],
@@ -81,7 +80,6 @@ rf_params = {"max_depth": [3, 5, 8],
              "min_samples_split": [2, 5, 10]}
 
 rf = RandomForestClassifier(random_state=123)
-
 
 gs_cv_rf = GridSearchCV(rf,
                         rf_params,
@@ -92,7 +90,7 @@ gs_cv_rf = GridSearchCV(rf,
 rf_tuned = RandomForestClassifier(**gs_cv_rf.best_params_, random_state=123).fit(X_train, y_train)
 gs_cv_rf.best_params_
 
-#models = [("RF", rf_tuned)]
+# models = [("RF", rf_tuned)]
 #
 # for name, model in models:
 #     y_pred = model.predict(X_test)
@@ -100,8 +98,17 @@ gs_cv_rf.best_params_
 #     msg = "%s: (%f)" % (name, acc)
 #     print(msg)
 
+best_params = gs_cv_rf.best_params_
 
+# best parametreleri kaydetmek için:
+f_add = open("best_params/best_params.txt", "a")
 
+f_add.writelines("max depth : {0} -- max features : {1} -- min samples split : {2} -- n estimators : {3}".format(
+    best_params["max_depth"], best_params["max_features"], best_params["min_samples_split"],
+    best_params["n_estimators"]))
+
+f_add.writelines("\nYukarıdaki parametreler 0.50  submission puanına sahip.\n")
+f_add.close()
 
 # Submission File
 y_preds = rf_tuned.predict(X_test)
