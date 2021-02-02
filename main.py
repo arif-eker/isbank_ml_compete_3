@@ -76,7 +76,7 @@ X_test = df_test.drop("target", axis=1)
 
 
 rf_params = {"max_depth": [3, 5, 8],
-             "max_features": [8, 15, 25],
+             "max_features": [8, 15, 20],
              "n_estimators": [200, 500, 1000],
              "min_samples_split": [2, 5, 10]}
 
