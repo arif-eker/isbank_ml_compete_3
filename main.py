@@ -100,6 +100,16 @@ gs_cv_rf.best_params_
 
 best_params = gs_cv_rf.best_params_
 
+
+# Submission File
+y_preds = rf_tuned.predict(X_test)
+sub = pd.DataFrame()
+sub["musteri"] = merged_df[merged_df["target"].isnull()]["musteri"]
+sub["target"] = y_preds
+sub.head()
+sub.to_csv('datasets/rf_classifier_3_8_2_200_2.csv', index=False)
+
+
 # best parametreleri kaydetmek için:
 f_add = open("best_params/best_params.txt", "a")
 
@@ -109,11 +119,3 @@ f_add.writelines("max depth : {0} -- max features : {1} -- min samples split : {
 
 f_add.writelines("\nYukarıdaki parametreler 0.50  submission puanına sahip.\n")
 f_add.close()
-
-# Submission File
-y_preds = rf_tuned.predict(X_test)
-sub = pd.DataFrame()
-sub["musteri"] = merged_df[merged_df["target"].isnull()]["musteri"]
-sub["target"] = y_preds
-sub.head()
-sub.to_csv('datasets/rf_classifier_3_8_2_200.csv', index=False)
