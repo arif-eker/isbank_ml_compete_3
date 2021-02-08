@@ -8,8 +8,12 @@ import missingno as msno
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
+from lightgbm import LGBMClassifier
 from sklearn.metrics import accuracy_score, roc_auc_score, roc_curve, \
     classification_report
+from sklearn.metrics import confusion_matrix,classification_report,f1_score,recall_score
+
+from imblearn.under_sampling import RandomUnderSampler
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -17,10 +21,26 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 train_test = hlp.get_merge_df()
 
-monthly_df = hlp.get_singular_monthly_expenditures()
+# Random Under Sampling Yapıyoruz
+train_df = pd.read_csv("datasets/train.csv")
+ranUnSample = RandomUnderSampler()
+X_train = train_df.drop("target", axis=1)
+y_train = np.ravel(train_df[["target"]])
+X_ranUnSample, y_ranUnSample = ranUnSample.fit_resample(X_train,y_train,)
+X_ranUnSample["target"] = y_ranUnSample
 
-merged_df = train_test.merge(monthly_df, how="left", on="musteri")
-df = merged_df.copy()
+train_df = X_ranUnSample.copy()
+test_df = pd.read_csv("datasets/test.csv")
+merged = pd.concat([train_df, test_df], ignore_index=True)
+
+monthly_df = hlp.get_singular_monthly_expenditures()
+merged = merged.merge(monthly_df, how="left", on="musteri")
+# merged_df = train_test.merge(monthly_df, how="left", on="musteri")
+
+# df = merged_df.copy()
+
+df = merged.copy()
+len(df)
 droplist = ["musteri", "tarih"]
 
 df.drop(droplist, axis=1, inplace=True)
@@ -90,6 +110,23 @@ gs_cv_rf = GridSearchCV(rf,
 rf_tuned = RandomForestClassifier(**gs_cv_rf.best_params_, random_state=123).fit(X_train, y_train)
 gs_cv_rf.best_params_
 
+# Learning rate tanımlamak için LGBM kullandık. Az veride düşük tanımlamak önemlidir.
+lgbm_params = {"learning_rate": [0.001, 0.1],
+               "n_estimators": [200, 500, 1000],
+               "max_depth": [3, 5, 8],
+               "colsample_bytree": [1, 0.8, 0.5],
+               "num_leaves": [32, 64, 128]}
+
+lgbm = LGBMClassifier(random_state=123)
+gs_cv_lgbm = GridSearchCV(lgbm,
+                          lgbm_params,
+                          cv=10,
+                          n_jobs=-1,
+                          verbose=2).fit(X_train, y_train)
+
+lgbm_tuned = LGBMClassifier(**gs_cv_lgbm.best_params_, random_state=123).fit(X_train, y_train)
+best_params = gs_cv_lgbm.best_params_
+
 # models = [("RF", rf_tuned)]
 #
 # for name, model in models:
@@ -98,16 +135,18 @@ gs_cv_rf.best_params_
 #     msg = "%s: (%f)" % (name, acc)
 #     print(msg)
 
-best_params = gs_cv_rf.best_params_
-
+# best_params = gs_cv_rf.best_params_
+best_params = gs_cv_lgbm.best_params_
+dir(best_params)
 
 # Submission File
-y_preds = rf_tuned.predict(X_test)
+y_preds = lgbm_tuned.predict(X_test)
 sub = pd.DataFrame()
-sub["musteri"] = merged_df[merged_df["target"].isnull()]["musteri"]
+# sub["musteri"] = merged_df[merged_df["target"].isnull()]["musteri"]
+sub["musteri"] = merged[merged["target"].isnull()]["musteri"]
 sub["target"] = y_preds
 sub.head()
-sub.to_csv('datasets/rf_classifier_3_8_2_200_2.csv', index=False)
+sub.to_csv('datasets/lgbm_classifier_withundersampling.csv', index=False)
 
 
 # best parametreleri kaydetmek için:
@@ -116,6 +155,7 @@ f_add = open("best_params/best_params.txt", "a")
 f_add.writelines("max depth : {0} -- max features : {1} -- min samples split : {2} -- n estimators : {3}".format(
     best_params["max_depth"], best_params["max_features"], best_params["min_samples_split"],
     best_params["n_estimators"]))
+f_add.writelines("\n 'colsample_bytree': 0.5, 'learning_rate': 0.1, 'max_depth': 3, 'n_estimators': 200, 'num_leaves': 32")
 
-f_add.writelines("\nYukarıdaki parametreler 0.50  submission puanına sahip.\n")
+f_add.writelines("\nYukarıdaki parametreler LGBM için: 0.71037  submission puanına sahip.\n")
 f_add.close()
