@@ -156,3 +156,12 @@ def rf_tuned_model(x_train, y_train):
     rf_tuned = RandomForestClassifier(**gs_cv_rf.best_params_, random_state=123).fit(x_train, y_train)
 
     return rf_tuned, gs_cv_rf.best_params_
+
+
+def do_submission(dataframe, y_predictions, file_name):
+    sub = pd.DataFrame()
+    # sub["musteri"] = merged_df[merged_df["target"].isnull()]["musteri"]
+    sub["musteri"] = dataframe[dataframe["target"].isnull()]["musteri"]
+    sub["target"] = y_predictions
+    file_path = "datasets/" + file_name
+    sub.to_csv(file_path, index=False)
