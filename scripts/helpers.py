@@ -7,6 +7,9 @@
 import pandas as pd
 import numpy as np
 import seaborn as sns
+from sklearn.ensemble import RandomForestClassifier
+from lightgbm import LGBMClassifier
+from sklearn.model_selection import GridSearchCV
 
 pd.set_option('display.max_columns', None)
 
@@ -32,6 +35,7 @@ def one_hot_encoder(dataframe, categorical_columns, nan_as_category=False):
     new_columns = [col for col in dataframe.columns if col not in original_columns]
 
     return dataframe, new_columns
+
 
 def find_correlation(dataframe, numeric_columns, target, corr_limit=0.50):
     """
@@ -101,3 +105,54 @@ def get_singular_monthly_expenditures():
     agg_df = pure_processed.merge(new_df, how="left", on="musteri")
 
     return agg_df
+
+
+def lgbm_tuned_model(x_train, y_train):
+    """
+
+    :param x_train: Train veri setinin değişkenleri
+    :param y_train: Train veri setinin hedef değişkeni
+    :return: İlk değer tune edilmiş model nesnesi, ikinci değer bu modelin en iyi parametreleri
+    """
+    lgbm_params = {"learning_rate": [0.001, 0.01, 0.1],
+                   "n_estimators": [200, 500, 750, 1000],
+                   "max_depth": [3, 5, 8, 10],
+                   "colsample_bytree": [1, 0.8, 0.5],
+                   "num_leaves": [32, 64, 128]}
+
+    lgbm = LGBMClassifier(random_state=123)
+
+    gs_cv_lgbm = GridSearchCV(lgbm,
+                              lgbm_params,
+                              cv=10,
+                              n_jobs=-1,
+                              verbose=2).fit(x_train, y_train)
+
+    lgbm_tuned = LGBMClassifier(**gs_cv_lgbm.best_params_, random_state=123).fit(x_train, y_train)
+
+    return lgbm_tuned, gs_cv_lgbm.best_params_
+
+
+def rf_tuned_model(x_train, y_train):
+    """
+
+    :param x_train: Train veri setinin değişkenleri
+    :param y_train: Train veri setinin hedef değişkeni
+    :return: İlk değer tune edilmiş model nesnesi, ikinci değer bu modelin en iyi parametreleri
+    """
+    rf_params = {"max_depth": [3, 5, 8],
+                 "max_features": [8, 15, 20],
+                 "n_estimators": [200, 500, 750, 1000],
+                 "min_samples_split": [2, 5, 8, 10]}
+
+    rf = RandomForestClassifier(random_state=123)
+
+    gs_cv_rf = GridSearchCV(rf,
+                            rf_params,
+                            cv=10,
+                            n_jobs=-1,
+                            verbose=2).fit(x_train, y_train)
+
+    rf_tuned = RandomForestClassifier(**gs_cv_rf.best_params_, random_state=123).fit(x_train, y_train)
+
+    return rf_tuned, gs_cv_rf.best_params_
