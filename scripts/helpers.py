@@ -163,5 +163,42 @@ def do_submission(dataframe, y_predictions, file_name):
     # sub["musteri"] = merged_df[merged_df["target"].isnull()]["musteri"]
     sub["musteri"] = dataframe[dataframe["target"].isnull()]["musteri"]
     sub["target"] = y_predictions
-    file_path = "datasets/" + file_name
+    file_path = "datasets/" + file_name + ".csv"
     sub.to_csv(file_path, index=False)
+
+
+def save_best_params(model_name, best_parameters, point):
+    """
+
+    :param model_name: Hangi model kullanıldı ise o modelin ismi
+    :param best_parameters: Modelin best parametreleri
+    :param point: Bu modelin yarışmadaki puanı
+    :return:
+    """
+    f_add = open("best_params/best_params.txt", "a")
+
+    if model_name == "rf":
+        f_add.writelines(
+            "max_depth : {0} -- max_features : {1} -- min_samples_split : {2} -- n_estimators : {3}".format(
+                best_parameters["max_depth"],
+                best_parameters["max_features"],
+                best_parameters["min_samples_split"],
+                best_parameters["n_estimators"]))
+
+        f_add.writelines("\nYukarıdaki parametreler RF için: {0}  submission puanına sahip.\n".format(point))
+
+    elif model_name == "lgbm":
+        f_add.writelines(
+            "learning_rate : {0} -- n_estimators : {1} -- max_depth : {2} -- colsample_bytree : {3} -- num_leaves : {4}".format(
+                best_parameters["learning_rate"],
+                best_parameters["n_estimators"],
+                best_parameters["max_depth"],
+                best_parameters["colsample_bytree"],
+                best_parameters["num_leaves"]))
+
+        f_add.writelines("\nYukarıdaki parametreler LGBM için: {0}  submission puanına sahip.\n".format(point))
+
+    else:
+        print("Geçerli bir model ismi giriniz!!!")
+
+    f_add.close()
