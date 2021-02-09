@@ -89,12 +89,8 @@ lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
 
 # Submission File
 y_preds = lgbm_tuned.predict(X_test)
-sub = pd.DataFrame()
-# sub["musteri"] = merged_df[merged_df["target"].isnull()]["musteri"]
-sub["musteri"] = merged[merged["target"].isnull()]["musteri"]
-sub["target"] = y_preds
-sub.head()
-sub.to_csv('datasets/lgbm_classifier_withundersampling.csv', index=False)
+
+hlp.do_submission(merged, y_preds, "file_name")
 
 # best parametreleri kaydetmek için:
 f_add = open("best_params/best_params.txt", "a")
