@@ -64,18 +64,7 @@ for col in fill_mod_col:
 
 df, new_cols = hlp.one_hot_encoder(df, ["egitim", "is_durumu", "meslek_grubu"])
 
-df_train = df[df["target"].notnull()]
-
-df_test = df[df["target"].isnull()]
-
-df_train["target"] = df_train["target"].astype(int)
-
-X_train = df_train.drop("target", axis=1)
-y_train = np.ravel(df_train[["target"]])
-
-X_test = df_test.drop("target", axis=1)
-# y_test = np.ravel(df_test[["target"]])
-
+X_train, y_train, X_test = hlp.get_train_test_data(df)
 
 lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
 
