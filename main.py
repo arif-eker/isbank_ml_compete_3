@@ -92,14 +92,4 @@ y_preds = lgbm_tuned.predict(X_test)
 
 hlp.do_submission(merged, y_preds, "file_name")
 
-# best parametreleri kaydetmek için:
-f_add = open("best_params/best_params.txt", "a")
-
-f_add.writelines("max depth : {0} -- max features : {1} -- min samples split : {2} -- n estimators : {3}".format(
-    best_params["max_depth"], best_params["max_features"], best_params["min_samples_split"],
-    best_params["n_estimators"]))
-f_add.writelines(
-    "\n 'colsample_bytree': 0.5, 'learning_rate': 0.1, 'max_depth': 3, 'n_estimators': 200, 'num_leaves': 32")
-
-f_add.writelines("\nYukarıdaki parametreler LGBM için: 0.71037  submission puanına sahip.\n")
-f_add.close()
+hlp.save_best_params("lgbm", best_params, 0.71037)
