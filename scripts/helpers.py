@@ -202,3 +202,25 @@ def save_best_params(model_name, best_parameters, point):
         print("Geçerli bir model ismi giriniz!!!")
 
     f_add.close()
+
+
+def get_train_test_data(dataframe):
+
+    """
+
+    :param dataframe: Train ve Test için bölümlere ayrılacak ana dataframe
+    :return: X_train ; train edilecek veri. y_train ; train için hedef değişken. X_test ; test edilecek veri.
+    """
+    df_train = dataframe[dataframe["target"].notnull()]
+
+    df_test = dataframe[dataframe["target"].isnull()]
+
+    df_train["target"] = df_train["target"].astype(int)
+
+    x_train = df_train.drop("target", axis=1)
+    y_train = np.ravel(df_train[["target"]])
+
+    x_test = df_test.drop("target", axis=1)
+    # y_test = np.ravel(df_test[["target"]])
+
+    return x_train, y_train, x_test
