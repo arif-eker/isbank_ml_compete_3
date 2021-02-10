@@ -41,21 +41,28 @@ type_list = ["yas", "kidem_suresi"]
 for i in type_list:
     df[i] = df[i].astype(int)
 
+# Yeni değişkenler türetiliyor.
 hlp.add_new_features(df)
 
 num_cols = [col for col in df.columns if df[col].dtype != "O"]
 
+# Kategorik olan eksik değerler kırılımlara göre dolduruluyor.
 hlp.fillna_with_mode(df)
 
+# Kategorik değişkenler modele girmek üzere one-hot ediliyor.
 df, new_cols = hlp.one_hot_encoder(df, ["egitim", "is_durumu", "meslek_grubu", "yas_aralik", "kidem_aralik"])
 
+# Model için dataframe train ve test olmak üzere bölünüyor.
 X_train, y_train, X_test = hlp.get_train_test_data(df)
 
+# LGBM modeli oluşturuluyor.
 lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
 
-# Submission File
+# Eğitilen modelden tahminler yapılıyor.
 y_preds = lgbm_tuned.predict(X_test)
 
+# Yarışma için submission dosyası hazırlanıyor.
 hlp.do_submission(merged, y_preds, "lgbm_10_02_with_undersampling")
 
+# En iyi parametreler kaydediliyor.
 hlp.save_best_params("lgbm", best_params, 0.71037)
