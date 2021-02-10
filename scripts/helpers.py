@@ -37,37 +37,13 @@ def one_hot_encoder(dataframe, categorical_columns, nan_as_category=False):
     return dataframe, new_columns
 
 
-def find_correlation(dataframe, numeric_columns, target, corr_limit=0.50):
-    """
-    -> Sayısal değişkenlerin targetla olan korelasyonunu inceler.
-
-    :param dataframe: İşlem yapılacak dataframe
-    :param numeric_columns: Sayısal değişken adları
-    :param target: Korelasyon ilişkisinde bakılacak hedef değişken
-    :param corr_limit: Korelasyon sınırı. Sınırdan aşağısı düşük, yukarısı yüksek korelasyon
-    :return: İlk değer düşük korelasyona sahip değişkenler, ikinci değer yüksek korelasyona sahip değişkenler
-    """
-    high_correlations = []
-
-    low_correlations = []
-
-    for col in numeric_columns:
-        if col == target:
-            pass
-
-        else:
-            correlation = dataframe[[col, target]].corr().loc[col, target]
-
-            if abs(correlation) > corr_limit:
-                high_correlations.append(col + " : " + str(correlation))
-
-            else:
-                low_correlations.append(col + " : " + str(correlation))
-
-    return low_correlations, high_correlations
-
-
 def get_merge_df():
+    """
+
+    Train ve test verilerini birleştirip, döndürür.
+
+    :return: birleştirilmiş dataframe
+    """
     train_df = pd.read_csv("datasets/train.csv")
     test_df = pd.read_csv("datasets/test.csv")
     merge_df = pd.concat([train_df, test_df], ignore_index=True)
@@ -80,6 +56,13 @@ def check_df(dataframe):
 
 
 def get_singular_monthly_expenditures():
+    """
+
+    Müşterilerin aylık harcama verilerinin, karşılaştırma yapabilmek için tekilleştirilmiş halde alınmasını sağlar.
+    Her bir müşteri için tek bir gözlem birimi vardır.
+
+    :return: teklleştirilmiş verilerden oluşan bir dataframe
+    """
     pure_df = pd.read_csv("datasets/monthly_expenditures.csv")
 
     pure_df = pure_df.groupby(["musteri", "sektor"]).agg({"islem_adedi": "sum",
@@ -107,7 +90,45 @@ def get_singular_monthly_expenditures():
     return agg_df
 
 
+def fillna_with_mode(dataframe):
+    """
+
+    Bu fonksiyon verilen dataframe'deki  kategorik eksik değerleri kırılımlara göre doldurur.
+
+    :param dataframe: Eksik değeri olan dataframe
+    :return:
+    """
+    # Sınıflar alınıyor.
+    egitim = list(dataframe["egitim"].unique())
+    is_durumu = list(dataframe["is_durumu"].unique())
+
+    # Her ikisinde de "nan" olan sınıf düşürülüyor.
+    egitim.pop(4)
+    is_durumu.pop(11)
+
+    for x in egitim:
+        for y in is_durumu:
+            try:
+                dataframe.loc[(dataframe["egitim"] == x) & (dataframe["is_durumu"] == y), "meslek_grubu"] = \
+                    dataframe.loc[(dataframe["egitim"] == x) & (dataframe["is_durumu"] == y), "meslek_grubu"].fillna(
+                        dataframe.loc[
+                            (dataframe["egitim"] == x) & (dataframe["is_durumu"] == y), "meslek_grubu"].mode()[0])
+            except:
+                pass
+
+    fill_mod_col = ["egitim", "is_durumu", "meslek_grubu"]
+    for col in fill_mod_col:
+        dataframe[col] = dataframe[col].fillna(dataframe[col].mode()[0])
+
+
 def add_new_features(dataframe):
+    """
+
+    Bu fonksiyon verilen dataframe için değişken türetir.
+
+    :param dataframe: İçerisine değişken türetilecek dataframe
+    :return:
+    """
     # Yaş aralığı belirleniyor.
     bins = [18, 25, 36, 42, 50]
     labels = ["18_25", "26_36", "37_42", "43_50"]
@@ -125,6 +146,8 @@ def add_new_features(dataframe):
 
 def lgbm_tuned_model(x_train, y_train):
     """
+
+    LGBM modeli kurar, modeli tune eder ve geriye tune edilmiş model ile bu model için gereken en iyi parametreleri döndürür.
 
     :param x_train: Train veri setinin değişkenleri
     :param y_train: Train veri setinin hedef değişkeni
@@ -152,6 +175,8 @@ def lgbm_tuned_model(x_train, y_train):
 def rf_tuned_model(x_train, y_train):
     """
 
+    Random Forest için model kurar, bu modeli tune eder ve geriye tune edilmiş model ile bu model için gereken en iyi parametreleri döndürür.
+
     :param x_train: Train veri setinin değişkenleri
     :param y_train: Train veri setinin hedef değişkeni
     :return: İlk değer tune edilmiş model nesnesi, ikinci değer bu modelin en iyi parametreleri
@@ -175,6 +200,15 @@ def rf_tuned_model(x_train, y_train):
 
 
 def do_submission(dataframe, y_predictions, file_name):
+    """
+    Bu fonksiyon tahmin edilen değişkenlerden ve verilen dosya adı ile bir submission dosyası oluşturur.
+    Dosyayı datasets klasörü altında kaydeder.
+
+    :param dataframe: Dataframe
+    :param y_predictions: Tahmin edilen y değişenleri
+    :param file_name: Submisson dosyasının adı
+    :return:
+    """
     sub = pd.DataFrame()
     # sub["musteri"] = merged_df[merged_df["target"].isnull()]["musteri"]
     sub["musteri"] = dataframe[dataframe["target"].isnull()]["musteri"]
@@ -185,6 +219,7 @@ def do_submission(dataframe, y_predictions, file_name):
 
 def save_best_params(model_name, best_parameters, point):
     """
+    Modeller için en iyi parametreleri kaydeder.
 
     :param model_name: Hangi model kullanıldı ise o modelin ismi
     :param best_parameters: Modelin best parametreleri
@@ -222,6 +257,8 @@ def save_best_params(model_name, best_parameters, point):
 
 def get_train_test_data(dataframe):
     """
+
+    Verilen dataframe'den X_train, y_train, X_test verilerini elde ederek döndürür.
 
     :param dataframe: Train ve Test için bölümlere ayrılacak ana dataframe
     :return: X_train ; train edilecek veri. y_train ; train için hedef değişken. X_test ; test edilecek veri.
