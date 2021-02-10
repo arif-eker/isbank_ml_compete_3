@@ -37,7 +37,7 @@ def one_hot_encoder(dataframe, categorical_columns, nan_as_category=False):
     return dataframe, new_columns
 
 
-def get_merge_df():
+def train_test_df():
     """
 
     Train ve test verilerini birleştirip, döndürür.
@@ -255,7 +255,7 @@ def save_best_params(model_name, best_parameters, point):
     f_add.close()
 
 
-def get_train_test_data(dataframe):
+def train_test_split_data(dataframe):
     """
 
     Verilen dataframe'den X_train, y_train, X_test verilerini elde ederek döndürür.

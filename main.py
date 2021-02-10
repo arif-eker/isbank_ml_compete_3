@@ -12,7 +12,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.float_format', lambda x: '%.1f' % x)
 
-train_test = hlp.get_merge_df()
+train_test = hlp.train_test_df()
 
 # Random Under Sampling Yapıyoruz
 train_df = pd.read_csv("datasets/train.csv")
@@ -51,7 +51,7 @@ hlp.fillna_with_mode(df)
 df, new_cols = hlp.one_hot_encoder(df, ["egitim", "is_durumu", "meslek_grubu", "yas_aralik", "kidem_aralik"])
 
 # Model için dataframe train ve test olmak üzere bölünüyor.
-X_train, y_train, X_test = hlp.get_train_test_data(df)
+X_train, y_train, X_test = hlp.train_test_split_data(df)
 
 # LGBM modeli oluşturuluyor.
 lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
