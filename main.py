@@ -45,24 +45,7 @@ hlp.add_new_features(df)
 
 num_cols = [col for col in df.columns if df[col].dtype != "O"]
 
-egitim = list(df["egitim"].unique())
-is_durumu = list(df["is_durumu"].unique())
-
-egitim.pop(4)
-is_durumu.pop(11)
-
-for x in egitim:
-    for y in is_durumu:
-        try:
-            df.loc[(df["egitim"] == x) & (df["is_durumu"] == y), "meslek_grubu"] = \
-                df.loc[(df["egitim"] == x) & (df["is_durumu"] == y), "meslek_grubu"].fillna(
-                    df.loc[(df["egitim"] == x) & (df["is_durumu"] == y), "meslek_grubu"].mode()[0])
-        except:
-            pass
-
-fill_mod_col = ["egitim", "is_durumu", "meslek_grubu"]
-for col in fill_mod_col:
-    df[col] = df[col].fillna(df[col].mode()[0])
+hlp.fillna_with_mode(df)
 
 df, new_cols = hlp.one_hot_encoder(df, ["egitim", "is_durumu", "meslek_grubu", "yas_aralik", "kidem_aralik"])
 
