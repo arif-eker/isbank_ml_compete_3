@@ -44,8 +44,6 @@ for i in type_list:
 # Yeni değişkenler türetiliyor.
 hlp.add_new_features(df)
 
-num_cols = [col for col in df.columns if df[col].dtype != "O"]
-
 # Kategorik olan eksik değerler kırılımlara göre dolduruluyor.
 hlp.fillna_with_mode(df)
 
