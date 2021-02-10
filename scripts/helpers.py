@@ -68,8 +68,8 @@ def find_correlation(dataframe, numeric_columns, target, corr_limit=0.50):
 
 
 def get_merge_df():
-    train_df = pd.read_csv("D:\my_projects\pycharms\isbank_ml_uc\datasets/train.csv")
-    test_df = pd.read_csv("D:\my_projects\pycharms\isbank_ml_uc\datasets/test.csv")
+    train_df = pd.read_csv("datasets/train.csv")
+    test_df = pd.read_csv("datasets/test.csv")
     merge_df = pd.concat([train_df, test_df], ignore_index=True)
     return merge_df
 
@@ -80,7 +80,7 @@ def check_df(dataframe):
 
 
 def get_singular_monthly_expenditures():
-    pure_df = pd.read_csv("D:\my_projects\pycharms\isbank_ml_uc\datasets/monthly_expenditures.csv")
+    pure_df = pd.read_csv("datasets/monthly_expenditures.csv")
 
     pure_df = pure_df.groupby(["musteri", "sektor"]).agg({"islem_adedi": "sum",
                                                           "aylik_toplam_tutar": "sum"})
