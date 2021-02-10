@@ -107,6 +107,22 @@ def get_singular_monthly_expenditures():
     return agg_df
 
 
+def add_new_features(dataframe):
+    # Yaş aralığı belirleniyor.
+    bins = [18, 25, 36, 42, 50]
+    labels = ["18_25", "26_36", "37_42", "43_50"]
+
+    dataframe["yas_aralik"] = pd.cut(dataframe["yas"], bins=bins, labels=labels)
+    dataframe["yas_aralik"] = dataframe["yas_aralik"].astype("object")
+
+    # Kıdem süresi aralığı belirleniyor.
+    dataframe["kidem_aralik"] = pd.qcut(dataframe["kidem_suresi"], 5, labels=["q1", "q2", "q3", "q4", "q5"])
+    dataframe["kidem_aralik"] = dataframe["kidem_aralik"].astype("object")
+
+    # Kaç yıllık müşteri belirleniyor. virgülden sonraki rakam 0.5 ve üstüyse bir üst basamağa yuvarlanır. 2.6 = 3 olur.
+    dataframe["kidem_yil"] = round(dataframe["kidem_suresi"] / 12, 0)
+
+
 def lgbm_tuned_model(x_train, y_train):
     """
 
@@ -205,7 +221,6 @@ def save_best_params(model_name, best_parameters, point):
 
 
 def get_train_test_data(dataframe):
-
     """
 
     :param dataframe: Train ve Test için bölümlere ayrılacak ana dataframe
