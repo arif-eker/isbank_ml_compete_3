@@ -241,7 +241,7 @@ def save_best_params(model_name, best_parameters, point):
                 best_parameters["n_estimators"]))
 
         f_add.writelines("\nYukarıdaki parametreler RF için: {0}  submission puanına sahip.\n".format(point))
-
+        f_add.close()
     elif model_name == "lgbm":
         f_add.writelines(
             "learning_rate : {0} -- n_estimators : {1} -- max_depth : {2} -- colsample_bytree : {3} -- num_leaves : {4}".format(
@@ -252,11 +252,11 @@ def save_best_params(model_name, best_parameters, point):
                 best_parameters["num_leaves"]))
 
         f_add.writelines("\nYukarıdaki parametreler LGBM için: {0}  submission puanına sahip.\n".format(point))
-
+        f_add.close()
     else:
         print("Geçerli bir model ismi giriniz!!!")
 
-    f_add.close()
+
 
 
 def train_test_split_data(dataframe):

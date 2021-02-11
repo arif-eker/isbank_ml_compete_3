@@ -49,7 +49,7 @@ lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
 y_preds = lgbm_tuned.predict(X_test)
 
 # Yarışma için submission dosyası hazırlanıyor.
-hlp.do_submission(merged, y_preds, "lgbm_11_02_with_undersampling_afterall")
+hlp.do_submission(merged, y_preds, "lgbm_11_02_with_first_oversampling_afterall")
 
 # En iyi parametreler kaydediliyor.
-hlp.save_best_params("lgbm", best_params, 0.71037)
+hlp.save_best_params("lgbm", best_params, 0.50148)
