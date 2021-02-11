@@ -13,6 +13,7 @@ from sklearn.model_selection import GridSearchCV
 
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import RandomOverSampler
+from imblearn.over_sampling import SMOTE
 
 pd.set_option('display.max_columns', None)
 
@@ -287,3 +288,12 @@ def under_sampler(X_train, y_train):
     X_ranUnSample, y_ranUnSample = ranUnSample.fit_resample(X_train, y_train)
 
     return X_ranUnSample, y_ranUnSample
+
+
+def over_sampler(X_train, y_train):
+
+    oversample = SMOTE(sampling_strategy=0.4)
+
+    X_smote, y_smote = oversample.fit_resample(X_train, y_train)
+
+    return X_smote, y_smote

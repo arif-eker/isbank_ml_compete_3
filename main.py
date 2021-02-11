@@ -39,6 +39,9 @@ X_train, y_train, X_test = hlp.train_test_split_data(df)
 # Under Sampling yapılmış eğitim seti
 X_train, y_train = hlp.under_sampler(X_train, y_train)
 
+# SMOTE Over Sampling yapılmış eğitim seti
+X_train, y_train = hlp.over_sampler(X_train, y_train)
+
 # LGBM modeli oluşturuluyor.
 lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
 
@@ -46,7 +49,7 @@ lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
 y_preds = lgbm_tuned.predict(X_test)
 
 # Yarışma için submission dosyası hazırlanıyor.
-hlp.do_submission(merged, y_preds, "lgbm_10_02_with_undersampling")
+hlp.do_submission(merged, y_preds, "lgbm_11_02_with_undersampling_afterall")
 
 # En iyi parametreler kaydediliyor.
 hlp.save_best_params("lgbm", best_params, 0.71037)
