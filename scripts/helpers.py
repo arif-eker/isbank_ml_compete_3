@@ -11,6 +11,9 @@ from sklearn.ensemble import RandomForestClassifier
 from lightgbm import LGBMClassifier
 from sklearn.model_selection import GridSearchCV
 
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.over_sampling import RandomOverSampler
+
 pd.set_option('display.max_columns', None)
 
 
@@ -276,3 +279,11 @@ def train_test_split_data(dataframe):
     # y_test = np.ravel(df_test[["target"]])
 
     return x_train, y_train, x_test
+
+
+def under_sampler(X_train, y_train):
+    ranUnSample = RandomUnderSampler()
+
+    X_ranUnSample, y_ranUnSample = ranUnSample.fit_resample(X_train, y_train)
+
+    return X_ranUnSample, y_ranUnSample
