@@ -234,7 +234,7 @@ def save_best_params(model_name, best_parameters, point):
 
     if model_name == "rf":
         f_add.writelines(
-            "max_depth : {0} -- max_features : {1} -- min_samples_split : {2} -- n_estimators : {3}".format(
+            "\nmax_depth : {0} -- max_features : {1} -- min_samples_split : {2} -- n_estimators : {3}".format(
                 best_parameters["max_depth"],
                 best_parameters["max_features"],
                 best_parameters["min_samples_split"],
@@ -244,7 +244,7 @@ def save_best_params(model_name, best_parameters, point):
         f_add.close()
     elif model_name == "lgbm":
         f_add.writelines(
-            "learning_rate : {0} -- n_estimators : {1} -- max_depth : {2} -- colsample_bytree : {3} -- num_leaves : {4}".format(
+            "\nlearning_rate : {0} -- n_estimators : {1} -- max_depth : {2} -- colsample_bytree : {3} -- num_leaves : {4}".format(
                 best_parameters["learning_rate"],
                 best_parameters["n_estimators"],
                 best_parameters["max_depth"],
@@ -255,8 +255,6 @@ def save_best_params(model_name, best_parameters, point):
         f_add.close()
     else:
         print("Geçerli bir model ismi giriniz!!!")
-
-
 
 
 def train_test_split_data(dataframe):
@@ -282,18 +280,19 @@ def train_test_split_data(dataframe):
     return x_train, y_train, x_test
 
 
-def under_sampler(X_train, y_train):
+def under_sampler(x_train, y_train):
     ranUnSample = RandomUnderSampler()
 
-    X_ranUnSample, y_ranUnSample = ranUnSample.fit_resample(X_train, y_train)
+    x_ranUnSample, y_ranUnSample = ranUnSample.fit_resample(x_train, y_train)
 
-    return X_ranUnSample, y_ranUnSample
+    return x_ranUnSample, y_ranUnSample
 
 
-def over_sampler(X_train, y_train):
+def over_sampler(x_train, y_train):
+    oversample = SMOTE(sampling_strategy=0.15)
 
-    oversample = SMOTE(sampling_strategy=0.4)
+    x_smote, y_smote = oversample.fit_resample(x_train, y_train)
 
-    X_smote, y_smote = oversample.fit_resample(X_train, y_train)
+    x_under, y_under = under_sampler(x_smote, y_smote)
 
-    return X_smote, y_smote
+    return x_under, y_under

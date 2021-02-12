@@ -6,5 +6,8 @@ Yukarï¿½daki parametreler 0.50  submission puanï¿½na sahip.
 
  'colsample_bytree': 0.5, 'learning_rate': 0.1, 'max_depth': 3, 'n_estimators': 200, 'num_leaves': 32
 Yukarýdaki parametreler LGBM için: 0.71037  submission puanýna sahip.
+
 learning_rate : 0.1 -- n_estimators : 500 -- max_depth : 10 -- colsample_bytree : 0.5 -- num_leaves : 128
 Yukarýdaki parametreler LGBM için: 0.50148  submission puanýna sahip.
+learning_rate : 0.01 -- n_estimators : 1000 -- max_depth : 10 -- colsample_bytree : 1 -- num_leaves : 128
+Yukarýdaki parametreler LGBM için: 0.60124  submission puanýna sahip.
