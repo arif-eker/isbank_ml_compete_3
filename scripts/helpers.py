@@ -289,7 +289,7 @@ def under_sampler(x_train, y_train):
 
 
 def over_sampler(x_train, y_train):
-    oversample = SMOTE(sampling_strategy=0.15)
+    oversample = SMOTE(sampling_strategy=0.085)
 
     x_smote, y_smote = oversample.fit_resample(x_train, y_train)
 
