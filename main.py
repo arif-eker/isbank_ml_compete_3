@@ -42,24 +42,14 @@ df, new_cols = hlp.one_hot_encoder(df, ["egitim", "is_durumu", "meslek_grubu", "
 X_train, y_train, X_test = hlp.train_test_split_data(df)
 
 # Under Sampling yapılmış eğitim seti
-# X_train, y_train = hlp.under_sampler(X_train, y_train)
-#
-# x_train, x_test, yy_train, yy_test = train_test_split(X_train, y_train, test_size=0.20)
-#
-# lgbm, new_best_params = hlp.lgbm_tuned_model(x_train, yy_train)
-#
-# y_pred = lgbm.predict(x_test)
-# acc = accuracy_score(yy_test, y_pred)
-# msg = "(%f)" % acc
-# print(msg)
-# print(classification_report(yy_test, y_pred))
+X_train, y_train = hlp.under_sampler(X_train, y_train)
 
+print(pd.DataFrame(y_train).value_counts())
 # *********************************************************************** #
 
 # SMOTE Over Sampling yapılmış eğitim seti
-X_train, y_train = hlp.over_sampler(X_train, y_train)
+# X_train, y_train = hlp.over_sampler(X_train, y_train)
 
-print(pd.DataFrame(y_train).value_counts())
 
 # LGBM modeli oluşturuluyor.
 lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
@@ -68,7 +58,7 @@ lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
 y_preds = lgbm_tuned.predict(X_test)
 
 # Yarışma için submission dosyası hazırlanıyor.
-hlp.do_submission(merged, y_preds, "lgbm_13_02_overandunder_with_evlilik")
+hlp.do_submission(merged, y_preds, "lgbm_13_02_fifth_over_and_under_with_evlilik")
 
 # En iyi parametreler kaydediliyor.
-hlp.save_best_params("lgbm", best_params, 0.70945)
+hlp.save_best_params("lgbm", best_params, 0.70544)
