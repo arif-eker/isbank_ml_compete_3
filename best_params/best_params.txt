@@ -17,3 +17,6 @@ Yukarýdaki parametreler LGBM için: 0.67076  submission puanýna sahip.
 
 learning_rate : 0.1 -- n_estimators : 200 -- max_depth : 3 -- colsample_bytree : 1 -- num_leaves : 32
 Yukarýdaki parametreler LGBM için: 0.70626  submission puanýna sahip.
+
+learning_rate : 0.01 -- n_estimators : 750 -- max_depth : 3 -- colsample_bytree : 1 -- num_leaves : 32
+Yukarýdaki parametreler LGBM için: 0.70945  submission puanýna sahip.

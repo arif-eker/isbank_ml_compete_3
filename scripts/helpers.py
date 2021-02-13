@@ -134,8 +134,8 @@ def add_new_features(dataframe):
     :return:
     """
     # Yaş aralığı belirleniyor.
-    bins = [18, 25, 36, 42, 50]
-    labels = ["18_25", "26_36", "37_42", "43_50"]
+    bins = [18, 24, 29, 34, 39, 44, 50]
+    labels = ["18_24", "25_29", "30_34", "35_39", "40_44", "45_50"]
 
     dataframe["yas_aralik"] = pd.cut(dataframe["yas"], bins=bins, labels=labels)
     dataframe["yas_aralik"] = dataframe["yas_aralik"].astype("object")
@@ -146,6 +146,17 @@ def add_new_features(dataframe):
 
     # Kaç yıllık müşteri belirleniyor. virgülden sonraki rakam 0.5 ve üstüyse bir üst basamağa yuvarlanır. 2.6 = 3 olur.
     dataframe["kidem_yil"] = round(dataframe["kidem_suresi"] / 12, 0)
+    dataframe.drop("kidem_suresi", axis=1, inplace=True)
+
+    seg_map_binde_2019 = {
+        "18_24": 4.4530,
+        "25_29": 4.5453,
+        "30_34": 1.8451,
+        "35_39": 0.8403,
+        "40_44": 0.4422,
+        "45_50": 0.2646,
+    }
+    dataframe["Evlilik_Orani_Binde_2019"] = dataframe["yas_aralik"].replace(seg_map_binde_2019, regex=True)
 
 
 def lgbm_tuned_model(x_train, y_train):
