@@ -280,8 +280,6 @@ def train_test_split_data(dataframe):
 
     df_test = dataframe[dataframe["target"].isnull()]
 
-    df_train["target"] = df_train["target"].astype(int)
-
     x_train = df_train.drop("target", axis=1)
     y_train = np.ravel(df_train[["target"]])
 
