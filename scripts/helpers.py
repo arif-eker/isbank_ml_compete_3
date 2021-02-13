@@ -158,6 +158,76 @@ def add_new_features(dataframe):
     }
     dataframe["Evlilik_Orani_Binde_2019"] = dataframe["yas_aralik"].replace(seg_map_binde_2019, regex=True)
 
+    # Aylara Göre Dolar Kuru
+    dataframe["01_2019_Kur"] = 5.3759
+    dataframe["02_2019_Kur"] = 5.2769
+    dataframe["03_2019_Kur"] = 5.4666
+    dataframe["04_2019_Kur"] = 5.7617
+    dataframe["05_2019_Kur"] = 6.0560
+    dataframe["06_2019_Kur"] = 5.8127
+    dataframe["07_2019_Kur"] = 5.6718
+    dataframe["08_2019_Kur"] = 5.6511
+    dataframe["09_2019_Kur"] = 5.7150
+    dataframe["10_2019_Kur"] = 5.7993
+    dataframe["11_2019_Kur"] = 5.7431
+    dataframe["12_2019_Kur"] = 5.8572
+
+    # Aylara Göre Gram Altın Fiyatları
+    dataframe["01_2019_GramAltin"] = 222.65
+    dataframe["02_2019_GramAltin"] = 223.75
+    dataframe["03_2019_GramAltin"] = 228.43
+    dataframe["04_2019_GramAltin"] = 238.45
+    dataframe["05_2019_GramAltin"] = 249.52
+    dataframe["06_2019_GramAltin"] = 254.30
+    dataframe["07_2019_GramAltin"] = 257.09
+    dataframe["08_2019_GramAltin"] = 272.43
+    dataframe["09_2019_GramAltin"] = 276.43
+    dataframe["10_2019_GramAltin"] = 278.30
+    dataframe["11_2019_GramAltin"] = 270.52
+    dataframe["12_2019_GramAltin"] = 278.11
+
+    # Aylara Göre Çeyrek Altın Fiyatları
+    dataframe["01_2019_CeyrekAltin"] = 357.73
+    dataframe["02_2019_CeyrekAltin"] = 359.49
+    dataframe["03_2019_CeyrekAltin"] = 367.01
+    dataframe["04_2019_CeyrekAltin"] = 383.11
+    dataframe["05_2019_CeyrekAltin"] = 400.90
+    dataframe["06_2019_CeyrekAltin"] = 408.57
+    dataframe["07_2019_CeyrekAltin"] = 413.05
+    dataframe["08_2019_CeyrekAltin"] = 437.70
+    dataframe["09_2019_CeyrekAltin"] = 444.13
+    dataframe["10_2019_CeyrekAltin"] = 447.14
+    dataframe["11_2019_CeyrekAltin"] = 434.64
+    dataframe["12_2019_CeyrekAltin"] = 446.82
+
+    # Aylara Göre Enflasyon Oranı
+    dataframe["01_2019_Enflasyon"] = 20.35
+    dataframe["02_2019_Enflasyon"] = 19.67
+    dataframe["03_2019_Enflasyon"] = 19.71
+    dataframe["04_2019_Enflasyon"] = 19.50
+    dataframe["05_2019_Enflasyon"] = 18.71
+    dataframe["06_2019_Enflasyon"] = 15.72
+    dataframe["07_2019_Enflasyon"] = 16.65
+    dataframe["08_2019_Enflasyon"] = 15.01
+    dataframe["09_2019_Enflasyon"] = 9.26
+    dataframe["10_2019_Enflasyon"] = 8.55
+    dataframe["11_2019_Enflasyon"] = 10.56
+    dataframe["12_2019_Enflasyon"] = 11.84
+
+    # Aylara Göre Tüketici Güven Ekdeksi
+    dataframe["01_2019_GuvenEndeksi"] = 80.50
+    dataframe["02_2019_GuvenEndeksi"] = 79.21
+    dataframe["03_2019_GuvenEndeksi"] = 81.30
+    dataframe["04_2019_GuvenEndeksi"] = 83.61
+    dataframe["05_2019_GuvenEndeksi"] = 76.89
+    dataframe["06_2019_GuvenEndeksi"] = 79.75
+    dataframe["07_2019_GuvenEndeksi"] = 78.25
+    dataframe["08_2019_GuvenEndeksi"] = 79.14
+    dataframe["09_2019_GuvenEndeksi"] = 77.65
+    dataframe["10_2019_GuvenEndeksi"] = 78.46
+    dataframe["11_2019_GuvenEndeksi"] = 81.28
+    dataframe["12_2019_GuvenEndeksi"] = 80.72
+
 
 def lgbm_tuned_model(x_train, y_train):
     """
