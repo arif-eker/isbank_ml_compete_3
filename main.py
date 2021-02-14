@@ -25,13 +25,12 @@ hlp.fillna_with_mode(test)
 mergee = pd.concat([train, test], ignore_index=True)
 hlp.add_new_features(mergee)
 
-
 X_train, y_train, X_test = hlp.train_test_split_data(mergee)
 X_train, y_train = hlp.under_sampler(X_train, y_train)
 
 train_test = X_train.copy()
 train_test["target"] = y_train
-train_test = pd.concat([train_test,X_test], ignore_index=True)
+train_test = pd.concat([train_test, X_test], ignore_index=True)
 
 monthly_df = hlp.get_singular_monthly_expenditures()
 
@@ -67,19 +66,19 @@ print(pd.DataFrame(y_train).value_counts())
 
 
 # LGBM modeli oluşturuluyor.
-lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
+# lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
 
+rf_tuned, best_params = hlp.rf_tuned_model(X_train, y_train)
 
-pickle.dump(lgbm_tuned, open("datasets/" + "lgbm_tuned" + ".pkl", "wb"))
-lgbm_from_pickle = pickle.load(open("datasets/lgbm_tuned.pkl", "rb"))
-y_ppreedds = lgbm_from_pickle.predict(X_test)
-
+pickle.dump(rf_tuned, open("datasets/" + "rf_tuned" + ".pkl", "wb"))
+rf_from_pickle = pickle.load(open("datasets/rf_tuned.pkl", "rb"))
 
 # Eğitilen modelden tahminler yapılıyor.
-y_preds = lgbm_tuned.predict(X_test)
+# y_preds = lgbm_tuned.predict(X_test)
+y_preds = rf_tuned.predict(X_test)
 
 # Yarışma için submission dosyası hazırlanıyor.
-hlp.do_submission(merged, y_preds, "lgbm_13_02_sixth_under_with_evlilik")
+hlp.do_submission(merged, y_preds, "rf_14_02_under_with_parameters")
 
 # En iyi parametreler kaydediliyor.
-hlp.save_best_params("lgbm", best_params, 0.71051)
+hlp.save_best_params("rf", best_params, 0.71051)

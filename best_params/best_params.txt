@@ -5,24 +5,27 @@ max depth : 3 -- max features : 8 -- min samples split : 2 -- n estimators : 200
 Yukarï¿½daki parametreler 0.50  submission puanï¿½na sahip.
 
  'colsample_bytree': 0.5, 'learning_rate': 0.1, 'max_depth': 3, 'n_estimators': 200, 'num_leaves': 32
-Yukarýdaki parametreler LGBM için: 0.71037  submission puanýna sahip.
+Yukarï¿½daki parametreler LGBM iï¿½in: 0.71037  submission puanï¿½na sahip.
 
 learning_rate : 0.1 -- n_estimators : 500 -- max_depth : 10 -- colsample_bytree : 0.5 -- num_leaves : 128
-Yukarýdaki parametreler LGBM için: 0.50148  submission puanýna sahip.
+Yukarï¿½daki parametreler LGBM iï¿½in: 0.50148  submission puanï¿½na sahip.
 learning_rate : 0.01 -- n_estimators : 1000 -- max_depth : 10 -- colsample_bytree : 1 -- num_leaves : 128
-Yukarýdaki parametreler LGBM için: 0.60124  submission puanýna sahip.
+Yukarï¿½daki parametreler LGBM iï¿½in: 0.60124  submission puanï¿½na sahip.
 
 learning_rate : 0.01 -- n_estimators : 500 -- max_depth : 10 -- colsample_bytree : 0.5 -- num_leaves : 128
-Yukarýdaki parametreler LGBM için: 0.67076  submission puanýna sahip.
+Yukarï¿½daki parametreler LGBM iï¿½in: 0.67076  submission puanï¿½na sahip.
 
 learning_rate : 0.1 -- n_estimators : 200 -- max_depth : 3 -- colsample_bytree : 1 -- num_leaves : 32
-Yukarýdaki parametreler LGBM için: 0.70626  submission puanýna sahip.
+Yukarï¿½daki parametreler LGBM iï¿½in: 0.70626  submission puanï¿½na sahip.
 
 learning_rate : 0.01 -- n_estimators : 750 -- max_depth : 3 -- colsample_bytree : 1 -- num_leaves : 32
-Yukarýdaki parametreler LGBM için: 0.70945  submission puanýna sahip.
+Yukarï¿½daki parametreler LGBM iï¿½in: 0.70945  submission puanï¿½na sahip.
 
 learning_rate : 0.01 -- n_estimators : 1000 -- max_depth : 10 -- colsample_bytree : 0.5 -- num_leaves : 32
-Yukarýdaki parametreler LGBM için: 0.70544  submission puanýna sahip.
+Yukarï¿½daki parametreler LGBM iï¿½in: 0.70544  submission puanï¿½na sahip.
 
 learning_rate : 0.01 -- n_estimators : 500 -- max_depth : 3 -- colsample_bytree : 0.8 -- num_leaves : 32
-Yukarýdaki parametreler LGBM için: 0.71051  submission puanýna sahip.
+Yukarï¿½daki parametreler LGBM iï¿½in: 0.71051  submission puanï¿½na sahip.
+
+{'max_depth': None, 'max_features': 8, 'max_samples': 0.6, 'min_samples_leaf': 4, 'min_samples_split': 3, 'n_estimators': 200}
+Yukarï¿½daki parametreler RF iï¿½in: 0.71051  submission puanï¿½na sahip.

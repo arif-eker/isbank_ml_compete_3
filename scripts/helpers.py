@@ -266,10 +266,12 @@ def rf_tuned_model(x_train, y_train):
     :param y_train: Train veri setinin hedef değişkeni
     :return: İlk değer tune edilmiş model nesnesi, ikinci değer bu modelin en iyi parametreleri
     """
-    rf_params = {"max_depth": [3, 5, 8],
-                 "max_features": [8, 15, 20],
-                 "n_estimators": [200, 500, 750, 1000],
-                 "min_samples_split": [2, 5, 8, 10]}
+    rf_params = {"max_depth": [3, 5, 8, 10],
+                 "max_features": [3, 4, 5, 6, 7, 8],
+                 "n_estimators": [200, 300, 400],
+                 "min_samples_split": [3, 5, 8, 10],
+                 "min_samples_leaf": [3, 4, 5, 7, 10, 15],
+                 "max_samples": [0.2, 0.4, 0.6, 0.8]}
 
     rf = RandomForestClassifier(random_state=123)
 
@@ -321,7 +323,7 @@ def save_best_params(model_name, best_parameters, point):
                 best_parameters["min_samples_split"],
                 best_parameters["n_estimators"]))
 
-        f_add.writelines("\nYukarıdaki parametreler RF için: {0}  submission puanına sahip.\n".format(point))
+        f_add.writelines("\nYukaridaki parametreler RF icin: {0}  submission puanina sahip.\n".format(point))
         f_add.close()
     elif model_name == "lgbm":
         f_add.writelines(
@@ -332,7 +334,7 @@ def save_best_params(model_name, best_parameters, point):
                 best_parameters["colsample_bytree"],
                 best_parameters["num_leaves"]))
 
-        f_add.writelines("\nYukarıdaki parametreler LGBM için: {0}  submission puanına sahip.\n".format(point))
+        f_add.writelines("\nYukaridaki parametreler LGBM icin: {0}  submission puanina sahip.\n".format(point))
         f_add.close()
     else:
         print("Geçerli bir model ismi giriniz!!!")
