@@ -49,8 +49,7 @@ df.drop(droplist, axis=1, inplace=True)
 # hlp.add_new_features(df)
 
 # Kategorik değişkenler modele girmek üzere one-hot ediliyor.
-df, new_cols = hlp.one_hot_encoder(df, ["egitim", "is_durumu", "meslek_grubu", "yas_aralik", "kidem_aralik",
-                                        "Evlilik_Orani_Binde_2019"])
+df, new_cols = hlp.one_hot_encoder(df, ["egitim", "is_durumu", "meslek_grubu", "yas_aralik", "kidem_aralik"])
 
 # Model için dataframe train ve test olmak üzere bölünüyor.
 X_train, y_train, X_test = hlp.train_test_split_data(df)
@@ -66,19 +65,20 @@ print(pd.DataFrame(y_train).value_counts())
 
 
 # LGBM modeli oluşturuluyor.
-# lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
+lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
+pickle.dump(lgbm_tuned, open("datasets/" + "lgbm_tuned_spec" + ".pkl", "wb"))
+# lgbm_from_pickle = pickle.load(open("datasets/lgbm_tuned.pkl", "rb"))
 
-rf_tuned, best_params = hlp.rf_tuned_model(X_train, y_train)
-
-pickle.dump(rf_tuned, open("datasets/" + "rf_tuned" + ".pkl", "wb"))
-rf_from_pickle = pickle.load(open("datasets/rf_tuned.pkl", "rb"))
+# rf_tuned, best_params = hlp.rf_tuned_model(X_train, y_train)
+# pickle.dump(rf_tuned, open("datasets/" + "rf_tuned" + ".pkl", "wb"))
+# rf_from_pickle = pickle.load(open("datasets/rf_tuned.pkl", "rb"))
 
 # Eğitilen modelden tahminler yapılıyor.
-# y_preds = lgbm_tuned.predict(X_test)
-y_preds = rf_tuned.predict(X_test)
+y_preds = lgbm_tuned.predict(X_test)
+# y_preds = rf_tuned.predict(X_test)
 
 # Yarışma için submission dosyası hazırlanıyor.
-hlp.do_submission(merged, y_preds, "rf_14_02_under_with_parameters")
+hlp.do_submission(merged, y_preds, "rf_15_02_lgbm_under_with_parameters")
 
 # En iyi parametreler kaydediliyor.
-hlp.save_best_params("rf", best_params, 0.71051)
+hlp.save_best_params("lgbm", best_params, 0.71051)
