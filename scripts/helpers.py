@@ -255,13 +255,7 @@ def lgbm_tuned_model(x_train, y_train):
     #                           verbose=2).fit(x_train, y_train)
 
     # lgbm_tuned = LGBMClassifier(**gs_cv_lgbm.best_params_, random_state=123).fit(x_train, y_train)
-    lgbm_tuned = LGBMClassifier(learning_rate=0.01,
-                                n_estimators=10000,
-                                max_depth=6,
-                                colsample_bytree=0.8,
-                                num_leaves=32,
-                                min_child_samples=3,
-                                subsample=0.4).fit(x_train, y_train)
+    lgbm_tuned = LGBMClassifier(**lgbm_params).fit(x_train, y_train)
 
     # return lgbm_tuned, gs_cv_lgbm.best_params_
     return lgbm_tuned, lgbm_params

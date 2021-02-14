@@ -66,6 +66,7 @@ X_train, y_train, X_test = hlp.train_test_split_data(df)
 
 # LGBM modeli oluşturuluyor.
 lgbm_tuned, best_params = hlp.lgbm_tuned_model(X_train, y_train)
+lgbm_tuned.get_params()
 pickle.dump(lgbm_tuned, open("datasets/" + "lgbm_tuned_spec" + ".pkl", "wb"))
 # lgbm_from_pickle = pickle.load(open("datasets/lgbm_tuned.pkl", "rb"))
 
