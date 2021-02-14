@@ -1,5 +1,5 @@
 max depth : 3 -- max features : 8 -- min samples split : 2 -- n estimators : 200
-Yukaridaki parametreler 0.50  submission puan�na sahip. RF algoritmas�.
+Yukaridaki parametreler 0.50  submission puanina sahip. RF algoritmasi.
 
 max depth : 3 -- max features : 8 -- min samples split : 2 -- n estimators : 200
 Yukaridaki parametreler 0.50  submission puan�na sahip.
@@ -32,3 +32,6 @@ Yukaridaki parametreler RF icin: 0.70583  submission puanina sahip.
 
 colsample_bytree': 0.8, 'learning_rate': 0.01, 'max_depth': 5, 'min_child_samples': 3, 'n_estimators': 500, 'num_leaves': 20, 'subsample': 0.4
 Yukaridaki parametreler LGBM icin: 0.70672  submission puanina sahip.
+
+{'learning_rate': 0.01, 'n_estimators': 625, 'max_depth': 6, 'colsample_bytree': 0.8, 'num_leaves': 22, 'min_child_samples': 3, 'subsample': 0.5}
+Yukaridaki parametreler LGBM icin: 0.71173  submission puanina sahip.

@@ -238,26 +238,33 @@ def lgbm_tuned_model(x_train, y_train):
     :param y_train: Train veri setinin hedef değişkeni
     :return: İlk değer tune edilmiş model nesnesi, ikinci değer bu modelin en iyi parametreleri
     """
-    lgbm_params = {"learning_rate": [0.01, 0.05, 0.1],
-                   "n_estimators": [200, 300, 400, 500],
-                   "max_depth": [3, 5, 8],
-                   "colsample_bytree": [1, 0.8, 0.5, 0.3],
-                   "num_leaves": [10, 20, 32],
-                   "min_child_samples": [3, 4, 5, 6],
-                   "subsample": [0.4, 0.7, 1]
-                   }
+    lgbm_params = {"learning_rate": 0.01,
+                   "n_estimators": 10000,
+                   "max_depth": 6,
+                   "colsample_bytree": 0.8,
+                   "num_leaves": 32,
+                   "min_child_samples": 3,
+                   "subsample": 0.4}
 
-    lgbm = LGBMClassifier(random_state=123, )
+    lgbm = LGBMClassifier(random_state=123)
 
-    gs_cv_lgbm = GridSearchCV(lgbm,
-                              lgbm_params,
-                              cv=10,
-                              n_jobs=-1,
-                              verbose=2).fit(x_train, y_train)
+    # gs_cv_lgbm = GridSearchCV(lgbm,
+    #                           lgbm_params,
+    #                           cv=10,
+    #                           n_jobs=-1,
+    #                           verbose=2).fit(x_train, y_train)
 
-    lgbm_tuned = LGBMClassifier(**gs_cv_lgbm.best_params_, random_state=123).fit(x_train, y_train)
+    # lgbm_tuned = LGBMClassifier(**gs_cv_lgbm.best_params_, random_state=123).fit(x_train, y_train)
+    lgbm_tuned = LGBMClassifier(learning_rate=0.01,
+                                n_estimators=10000,
+                                max_depth=6,
+                                colsample_bytree=0.8,
+                                num_leaves=32,
+                                min_child_samples=3,
+                                subsample=0.4).fit(x_train, y_train)
 
-    return lgbm_tuned, gs_cv_lgbm.best_params_
+    # return lgbm_tuned, gs_cv_lgbm.best_params_
+    return lgbm_tuned, lgbm_params
 
 
 def rf_tuned_model(x_train, y_train):
