@@ -238,13 +238,13 @@ def lgbm_tuned_model(x_train, y_train):
     :param y_train: Train veri setinin hedef değişkeni
     :return: İlk değer tune edilmiş model nesnesi, ikinci değer bu modelin en iyi parametreleri
     """
-    lgbm_params = {"learning_rate": 0.01,
-                   "n_estimators": 10000,
-                   "max_depth": 6,
-                   "colsample_bytree": 0.8,
-                   "num_leaves": 32,
-                   "min_child_samples": 3,
-                   "subsample": 0.4}
+    lgbm_params = {"learning_rate": 0.02,
+                   "n_estimators": 500,
+                   "max_depth": 5,
+                   "colsample_bytree": 0.7,
+                   "num_leaves": 22,
+                   "min_child_samples": 4,
+                   "subsample": 0.5}
 
     lgbm = LGBMClassifier(random_state=123)
 
