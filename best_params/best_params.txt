@@ -1,19 +1,37 @@
 max depth : 3 -- max features : 8 -- min samples split : 2 -- n estimators : 200
-Yukarï¿½daki parametreler 0.50  submission puanï¿½na sahip. RF algoritmasï¿½.
+Yukaridaki parametreler 0.50  submission puanina sahip. RF algoritmasi.
 
 max depth : 3 -- max features : 8 -- min samples split : 2 -- n estimators : 200
-Yukarï¿½daki parametreler 0.50  submission puanï¿½na sahip.
+Yukaridaki parametreler 0.50  submission puanï¿½na sahip.
 
  'colsample_bytree': 0.5, 'learning_rate': 0.1, 'max_depth': 3, 'n_estimators': 200, 'num_leaves': 32
-Yukarýdaki parametreler LGBM için: 0.71037  submission puanýna sahip.
+Yukaridaki parametreler LGBM icin: 0.71037  submission puanina sahip.
 
 learning_rate : 0.1 -- n_estimators : 500 -- max_depth : 10 -- colsample_bytree : 0.5 -- num_leaves : 128
-Yukarýdaki parametreler LGBM için: 0.50148  submission puanýna sahip.
+Yukaridaki parametreler LGBM icin: 0.50148  submission puanina sahip.
 learning_rate : 0.01 -- n_estimators : 1000 -- max_depth : 10 -- colsample_bytree : 1 -- num_leaves : 128
-Yukarýdaki parametreler LGBM için: 0.60124  submission puanýna sahip.
+Yukaridaki parametreler LGBM icin: 0.60124  submission puanina sahip.
 
 learning_rate : 0.01 -- n_estimators : 500 -- max_depth : 10 -- colsample_bytree : 0.5 -- num_leaves : 128
-Yukarýdaki parametreler LGBM için: 0.67076  submission puanýna sahip.
+Yukaridaki parametreler LGBM icin: 0.67076  submission puanina sahip.
 
 learning_rate : 0.1 -- n_estimators : 200 -- max_depth : 3 -- colsample_bytree : 1 -- num_leaves : 32
-Yukarýdaki parametreler LGBM için: 0.70626  submission puanýna sahip.
+Yukaridaki parametreler LGBM icin: 0.70626  submission puanina sahip.
+
+learning_rate : 0.01 -- n_estimators : 750 -- max_depth : 3 -- colsample_bytree : 1 -- num_leaves : 32
+Yukaridaki parametreler LGBM icin: 0.70945  submission puanina sahip.
+
+learning_rate : 0.01 -- n_estimators : 1000 -- max_depth : 10 -- colsample_bytree : 0.5 -- num_leaves : 32
+Yukaridaki parametreler LGBM icin: 0.70544  submission puanina sahip.
+
+learning_rate : 0.01 -- n_estimators : 500 -- max_depth : 3 -- colsample_bytree : 0.8 -- num_leaves : 32
+Yukaridaki parametreler LGBM icin: 0.71051  submission puanina sahip.
+
+{'max_depth': None, 'max_features': 8, 'max_samples': 0.6, 'min_samples_leaf': 4, 'min_samples_split': 3, 'n_estimators': 200}
+Yukaridaki parametreler RF icin: 0.70583  submission puanina sahip.
+
+colsample_bytree': 0.8, 'learning_rate': 0.01, 'max_depth': 5, 'min_child_samples': 3, 'n_estimators': 500, 'num_leaves': 20, 'subsample': 0.4
+Yukaridaki parametreler LGBM icin: 0.70672  submission puanina sahip.
+
+{'learning_rate': 0.01, 'n_estimators': 625, 'max_depth': 6, 'colsample_bytree': 0.8, 'num_leaves': 22, 'min_child_samples': 3, 'subsample': 0.5}
+Yukaridaki parametreler LGBM icin: 0.71173  submission puanina sahip.

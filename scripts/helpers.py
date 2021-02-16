@@ -134,8 +134,8 @@ def add_new_features(dataframe):
     :return:
     """
     # Yaş aralığı belirleniyor.
-    bins = [18, 25, 36, 42, 50]
-    labels = ["18_25", "26_36", "37_42", "43_50"]
+    bins = [18, 24, 29, 34, 39, 44, 50]
+    labels = ["18_24", "25_29", "30_34", "35_39", "40_44", "45_50"]
 
     dataframe["yas_aralik"] = pd.cut(dataframe["yas"], bins=bins, labels=labels)
     dataframe["yas_aralik"] = dataframe["yas_aralik"].astype("object")
@@ -146,6 +146,87 @@ def add_new_features(dataframe):
 
     # Kaç yıllık müşteri belirleniyor. virgülden sonraki rakam 0.5 ve üstüyse bir üst basamağa yuvarlanır. 2.6 = 3 olur.
     dataframe["kidem_yil"] = round(dataframe["kidem_suresi"] / 12, 0)
+    dataframe.drop("kidem_suresi", axis=1, inplace=True)
+
+    seg_map_binde_2019 = {
+        "18_24": 4.4530,
+        "25_29": 4.5453,
+        "30_34": 1.8451,
+        "35_39": 0.8403,
+        "40_44": 0.4422,
+        "45_50": 0.2646,
+    }
+    dataframe["Evlilik_Orani_Binde_2019"] = dataframe["yas_aralik"].replace(seg_map_binde_2019, regex=True)
+
+    # Aylara Göre Dolar Kuru
+    dataframe["01_2019_Kur"] = 5.3759
+    dataframe["02_2019_Kur"] = 5.2769
+    dataframe["03_2019_Kur"] = 5.4666
+    dataframe["04_2019_Kur"] = 5.7617
+    dataframe["05_2019_Kur"] = 6.0560
+    dataframe["06_2019_Kur"] = 5.8127
+    dataframe["07_2019_Kur"] = 5.6718
+    dataframe["08_2019_Kur"] = 5.6511
+    dataframe["09_2019_Kur"] = 5.7150
+    dataframe["10_2019_Kur"] = 5.7993
+    dataframe["11_2019_Kur"] = 5.7431
+    dataframe["12_2019_Kur"] = 5.8572
+
+    # Aylara Göre Gram Altın Fiyatları
+    dataframe["01_2019_GramAltin"] = 222.65
+    dataframe["02_2019_GramAltin"] = 223.75
+    dataframe["03_2019_GramAltin"] = 228.43
+    dataframe["04_2019_GramAltin"] = 238.45
+    dataframe["05_2019_GramAltin"] = 249.52
+    dataframe["06_2019_GramAltin"] = 254.30
+    dataframe["07_2019_GramAltin"] = 257.09
+    dataframe["08_2019_GramAltin"] = 272.43
+    dataframe["09_2019_GramAltin"] = 276.43
+    dataframe["10_2019_GramAltin"] = 278.30
+    dataframe["11_2019_GramAltin"] = 270.52
+    dataframe["12_2019_GramAltin"] = 278.11
+
+    # Aylara Göre Çeyrek Altın Fiyatları
+    dataframe["01_2019_CeyrekAltin"] = 357.73
+    dataframe["02_2019_CeyrekAltin"] = 359.49
+    dataframe["03_2019_CeyrekAltin"] = 367.01
+    dataframe["04_2019_CeyrekAltin"] = 383.11
+    dataframe["05_2019_CeyrekAltin"] = 400.90
+    dataframe["06_2019_CeyrekAltin"] = 408.57
+    dataframe["07_2019_CeyrekAltin"] = 413.05
+    dataframe["08_2019_CeyrekAltin"] = 437.70
+    dataframe["09_2019_CeyrekAltin"] = 444.13
+    dataframe["10_2019_CeyrekAltin"] = 447.14
+    dataframe["11_2019_CeyrekAltin"] = 434.64
+    dataframe["12_2019_CeyrekAltin"] = 446.82
+
+    # Aylara Göre Enflasyon Oranı
+    dataframe["01_2019_Enflasyon"] = 20.35
+    dataframe["02_2019_Enflasyon"] = 19.67
+    dataframe["03_2019_Enflasyon"] = 19.71
+    dataframe["04_2019_Enflasyon"] = 19.50
+    dataframe["05_2019_Enflasyon"] = 18.71
+    dataframe["06_2019_Enflasyon"] = 15.72
+    dataframe["07_2019_Enflasyon"] = 16.65
+    dataframe["08_2019_Enflasyon"] = 15.01
+    dataframe["09_2019_Enflasyon"] = 9.26
+    dataframe["10_2019_Enflasyon"] = 8.55
+    dataframe["11_2019_Enflasyon"] = 10.56
+    dataframe["12_2019_Enflasyon"] = 11.84
+
+    # Aylara Göre Tüketici Güven Ekdeksi
+    dataframe["01_2019_GuvenEndeksi"] = 80.50
+    dataframe["02_2019_GuvenEndeksi"] = 79.21
+    dataframe["03_2019_GuvenEndeksi"] = 81.30
+    dataframe["04_2019_GuvenEndeksi"] = 83.61
+    dataframe["05_2019_GuvenEndeksi"] = 76.89
+    dataframe["06_2019_GuvenEndeksi"] = 79.75
+    dataframe["07_2019_GuvenEndeksi"] = 78.25
+    dataframe["08_2019_GuvenEndeksi"] = 79.14
+    dataframe["09_2019_GuvenEndeksi"] = 77.65
+    dataframe["10_2019_GuvenEndeksi"] = 78.46
+    dataframe["11_2019_GuvenEndeksi"] = 81.28
+    dataframe["12_2019_GuvenEndeksi"] = 80.72
 
 
 def lgbm_tuned_model(x_train, y_train):
@@ -157,23 +238,27 @@ def lgbm_tuned_model(x_train, y_train):
     :param y_train: Train veri setinin hedef değişkeni
     :return: İlk değer tune edilmiş model nesnesi, ikinci değer bu modelin en iyi parametreleri
     """
-    lgbm_params = {"learning_rate": [0.001, 0.01, 0.1],
-                   "n_estimators": [200, 500, 750, 1000],
-                   "max_depth": [3, 5, 8, 10],
-                   "colsample_bytree": [1, 0.8, 0.5],
-                   "num_leaves": [32, 64, 128]}
+    lgbm_params = {"learning_rate": 0.02,
+                   "n_estimators": 500,
+                   "max_depth": 5,
+                   "colsample_bytree": 0.7,
+                   "num_leaves": 22,
+                   "min_child_samples": 4,
+                   "subsample": 0.5}
 
     lgbm = LGBMClassifier(random_state=123)
 
-    gs_cv_lgbm = GridSearchCV(lgbm,
-                              lgbm_params,
-                              cv=10,
-                              n_jobs=-1,
-                              verbose=2).fit(x_train, y_train)
+    # gs_cv_lgbm = GridSearchCV(lgbm,
+    #                           lgbm_params,
+    #                           cv=10,
+    #                           n_jobs=-1,
+    #                           verbose=2).fit(x_train, y_train)
 
-    lgbm_tuned = LGBMClassifier(**gs_cv_lgbm.best_params_, random_state=123).fit(x_train, y_train)
+    # lgbm_tuned = LGBMClassifier(**gs_cv_lgbm.best_params_, random_state=123).fit(x_train, y_train)
+    lgbm_tuned = LGBMClassifier(**lgbm_params).fit(x_train, y_train)
 
-    return lgbm_tuned, gs_cv_lgbm.best_params_
+    # return lgbm_tuned, gs_cv_lgbm.best_params_
+    return lgbm_tuned, lgbm_params
 
 
 def rf_tuned_model(x_train, y_train):
@@ -185,10 +270,12 @@ def rf_tuned_model(x_train, y_train):
     :param y_train: Train veri setinin hedef değişkeni
     :return: İlk değer tune edilmiş model nesnesi, ikinci değer bu modelin en iyi parametreleri
     """
-    rf_params = {"max_depth": [3, 5, 8],
-                 "max_features": [8, 15, 20],
-                 "n_estimators": [200, 500, 750, 1000],
-                 "min_samples_split": [2, 5, 8, 10]}
+    rf_params = {"max_depth": [3, 5, 8, 10],
+                 "max_features": [3, 4, 5, 6, 7, 8],
+                 "n_estimators": [200, 300, 400],
+                 "min_samples_split": [3, 5, 8, 10],
+                 "min_samples_leaf": [3, 4, 5, 7, 10, 15],
+                 "max_samples": [0.2, 0.4, 0.6, 0.8]}
 
     rf = RandomForestClassifier(random_state=123)
 
@@ -240,7 +327,7 @@ def save_best_params(model_name, best_parameters, point):
                 best_parameters["min_samples_split"],
                 best_parameters["n_estimators"]))
 
-        f_add.writelines("\nYukarıdaki parametreler RF için: {0}  submission puanına sahip.\n".format(point))
+        f_add.writelines("\nYukaridaki parametreler RF icin: {0}  submission puanina sahip.\n".format(point))
         f_add.close()
     elif model_name == "lgbm":
         f_add.writelines(
@@ -251,7 +338,7 @@ def save_best_params(model_name, best_parameters, point):
                 best_parameters["colsample_bytree"],
                 best_parameters["num_leaves"]))
 
-        f_add.writelines("\nYukarıdaki parametreler LGBM için: {0}  submission puanına sahip.\n".format(point))
+        f_add.writelines("\nYukaridaki parametreler LGBM icin: {0}  submission puanina sahip.\n".format(point))
         f_add.close()
     else:
         print("Geçerli bir model ismi giriniz!!!")
@@ -268,8 +355,6 @@ def train_test_split_data(dataframe):
     df_train = dataframe[dataframe["target"].notnull()]
 
     df_test = dataframe[dataframe["target"].isnull()]
-
-    df_train["target"] = df_train["target"].astype(int)
 
     x_train = df_train.drop("target", axis=1)
     y_train = np.ravel(df_train[["target"]])
